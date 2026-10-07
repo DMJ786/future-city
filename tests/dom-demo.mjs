@@ -1,0 +1,16 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {parseHTML} from 'linkedom';
+import * as game from '../dist/game.mjs';import * as letters from '../dist/letters.mjs';import * as gifts from '../dist/gifts.mjs';import * as landmarks from '../dist/landmarks.mjs';import * as audio from '../dist/soundscape.mjs';
+const deps={...game,...letters,...gifts,...landmarks,...audio};
+const {document,window}=parseHTML(fs.readFileSync('./dist/index.html','utf8'));const dialog=document.getElementById('modal');dialog.showModal=()=>dialog.open=true;dialog.close=()=>dialog.open=false;
+const captions=[],frames=[],models=[],queue=new Map();let serial=0,stopped=false,downloaded=false,now=0;
+const ctx=new Proxy({measureText:t=>({width:t.length*8}),fillText:t=>captions.push(t)},{get:(o,k)=>k in o?o[k]:()=>{},set:(o,k,v)=>(o[k]=v,true)});
+const stream={getTracks:()=>[{stop:()=>stopped=true}]};const create=document.createElement.bind(document);document.createElement=tag=>{const node=create(tag);if(tag==='canvas'){node.getContext=()=>ctx;node.captureStream=()=>stream;}if(tag==='a')node.click=()=>downloaded=true;return node;};const city=document.getElementById('city');city.width=1280;city.height=720;
+let restored;const presentation={night:true,cinema:false,angle:.66,targetAngle:.66,zoom:24,targetZoom:24,focus:false};const view={rebuild:s=>frames.push(structuredClone(s)),setLandmark:l=>models.push(l),getPresentation:()=>presentation,restorePresentation:p=>restored=p,resetCamera(){},setNight(){},setCinema(){},focusLandmark(){},flyTo(){}};
+class Recorder {static isTypeSupported(){return true;}constructor(){this.mimeType='video/webm';}start(){this.state='recording';}stop(){this.state='inactive';this.ondataavailable({data:new Blob(['mock-video'])});this.onstop();}}
+const source=fs.readFileSync('./dist/app.js','utf8').replace(/^import .*;\n/gm,'');
+const fn=new Function('document','window','navigator','matchMedia','createCityView','MediaRecorder','requestAnimationFrame','cancelAnimationFrame','performance','URL','setTimeout',...Object.keys(deps),source+';return {startGuidedRecording,getState,actBuild};');
+const app=fn(document,window,{},()=>({matches:false}),()=>view,Recorder,f=>{queue.set(++serial,f);return serial;},i=>queue.delete(i),{now:()=>now},{createObjectURL:()=> 'blob:demo',revokeObjectURL(){}},()=>0,...Object.values(deps));
+app.actBuild(0,'forest');const saved=app.getState();app.startGuidedRecording(Number(process.env.DEMO_SECONDS)||55);
+for(let t=0;t<=(Number(process.env.DEMO_SECONDS)||55);t++){now=t*1000;const task=queue.entries().next().value;assert.ok(task,'Demo should schedule until 55 seconds');queue.delete(task[0]);task[1](now);}
+assert.ok(downloaded&&stopped);assert.deepEqual(app.getState(),saved);assert.deepEqual(restored,presentation);assert.equal(document.getElementById('guided-progress'),null);assert.ok(frames.some(s=>s.year===2053));assert.ok(frames.some(s=>s.ended&&game.score(s)===83));assert.ok(models.includes('books'));assert.ok(captions.some(t=>t==='What do they love?'));assert.ok(captions.some(t=>t.startsWith('A gift from ')));assert.ok(captions.some(t=>t.startsWith('Build one for ')));assert.equal(queue.size,0);
+console.log('PASS: complete guided demo schedule, winning city, recipient phase, saved game/camera restoration and stream cleanup. Video pixels/codecs not exercised.');

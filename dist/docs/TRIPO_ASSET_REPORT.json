@@ -1,0 +1,137 @@
+[
+  {
+    "id": "books",
+    "originalBytes": 1580336,
+    "optimizedBytes": 850148,
+    "originalSHA256": "2115d9d40d3d202a45f61c6ba81572a845acd803174ba340021d0c32b2947834",
+    "optimizedSHA256": "8ceef419197c3226f27d44c8b520f64773858209d939111f08624a14a52fe5f0",
+    "triangles": 9992,
+    "meshes": 1,
+    "materials": 1,
+    "textures": [
+      {
+        "original": [
+          2048,
+          2048
+        ],
+        "optimized": [
+          1024,
+          1024
+        ],
+        "mime": "jpeg"
+      }
+    ],
+    "extensionsUsed": [],
+    "extensionsRequired": [],
+    "geometryUnchanged": true,
+    "materialFactorsUnchanged": true
+  },
+  {
+    "id": "music",
+    "originalBytes": 1131364,
+    "optimizedBytes": 633252,
+    "originalSHA256": "fc502cd80d4980bbb2bdd6168c71fa0266894a020e9762c648184687cb20eff2",
+    "optimizedSHA256": "5c28a58e61f41993c49e88984023db6c33a14b9d988e1a16d3b5af9e91d2212e",
+    "triangles": 9986,
+    "meshes": 1,
+    "materials": 1,
+    "textures": [
+      {
+        "original": [
+          2048,
+          2048
+        ],
+        "optimized": [
+          1024,
+          1024
+        ],
+        "mime": "jpeg"
+      }
+    ],
+    "extensionsUsed": [],
+    "extensionsRequired": [],
+    "geometryUnchanged": true,
+    "materialFactorsUnchanged": true
+  },
+  {
+    "id": "sport",
+    "originalBytes": 1262724,
+    "optimizedBytes": 702836,
+    "originalSHA256": "7868bcba420e2f5b1a40376e863f8033bf0fa7f7611eaa0277c31f13b2aff7bf",
+    "optimizedSHA256": "3631c7e7929eddb1af2d9326d21ffaf2e80027412f9fc8c85adf4ed45dd92321",
+    "triangles": 9978,
+    "meshes": 1,
+    "materials": 1,
+    "textures": [
+      {
+        "original": [
+          2048,
+          2048
+        ],
+        "optimized": [
+          1024,
+          1024
+        ],
+        "mime": "jpeg"
+      }
+    ],
+    "extensionsUsed": [],
+    "extensionsRequired": [],
+    "geometryUnchanged": true,
+    "materialFactorsUnchanged": true
+  },
+  {
+    "id": "stars",
+    "originalBytes": 981972,
+    "optimizedBytes": 549960,
+    "originalSHA256": "4be73a8fe7d651547c2c143b8d1c07c6448c1912ac253a63a78cbb98027f2a97",
+    "optimizedSHA256": "148a1c19e2a760cbb87bf7f0b52de87e765979f6173cc06a4ba85d14bb2f8bbb",
+    "triangles": 10000,
+    "meshes": 1,
+    "materials": 1,
+    "textures": [
+      {
+        "original": [
+          2048,
+          2048
+        ],
+        "optimized": [
+          1024,
+          1024
+        ],
+        "mime": "jpeg"
+      }
+    ],
+    "extensionsUsed": [],
+    "extensionsRequired": [],
+    "geometryUnchanged": true,
+    "materialFactorsUnchanged": true
+  },
+  {
+    "id": "sea",
+    "originalBytes": 1306588,
+    "optimizedBytes": 719304,
+    "originalSHA256": "ad7106cb32b5eebff246542d332e10c3f70c963c5ac069068119558dfcb2d140",
+    "optimizedSHA256": "9d2ac444fc92d2b5e554456169d40d972f9c2a7f8f0471a2530544982fd92f83",
+    "triangles": 9988,
+    "meshes": 1,
+    "materials": 1,
+    "textures": [
+      {
+        "original": [
+          2048,
+          2048
+        ],
+        "optimized": [
+          1024,
+          1024
+        ],
+        "mime": "jpeg"
+      }
+    ],
+    "extensionsUsed": [],
+    "extensionsRequired": [],
+    "geometryUnchanged": true,
+    "materialFactorsUnchanged": true
+  }
+]

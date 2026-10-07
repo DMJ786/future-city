@@ -1,0 +1,15 @@
+{
+  "name": "future-city",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dist --host 0.0.0.0 --port 4173 --strictPort",
+    "test": "node tests.mjs && node tests/camera-controls.mjs",
+    "test:dom": "node tests/dom-game.mjs && node tests/dom-recipient.mjs && node tests/dom-demo.mjs",
+    "test:media": "node tests/media-export.mjs && DEMO_SECONDS=90 node tests/dom-demo.mjs"
+  },
+  "devDependencies": {
+    "linkedom": "^0.18.13",
+    "vite": "^7.0.0"
+  }
+}

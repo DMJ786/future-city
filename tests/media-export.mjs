@@ -1,0 +1,18 @@
+import {tmpdir} from 'node:os';import {join} from 'node:path';import fs from 'node:fs';import assert from 'node:assert/strict';import {parseHTML} from 'linkedom';
+import * as game from '../dist/game.mjs';import * as letters from '../dist/letters.mjs';import * as gifts from '../dist/gifts.mjs';import * as landmarks from '../dist/landmarks.mjs';import * as audio from '../dist/soundscape.mjs';import * as zip from '../dist/media-zip.mjs';
+const deps={...game,...letters,...gifts,...landmarks,...audio,...zip};
+const {document,window}=parseHTML(fs.readFileSync('dist/index.html','utf8'));
+const dialog=document.getElementById('modal');dialog.showModal=()=>dialog.open=true;dialog.close=()=>dialog.open=false;
+const ctx=new Proxy({createLinearGradient:()=>({addColorStop(){}})},{get:(o,k)=>o[k]||(()=>{})});
+const create=document.createElement.bind(document);document.createElement=tag=>{const n=create(tag);if(tag==='canvas'){n.getContext=()=>ctx;n.toBlob=fn=>fn(new Blob(['test image only'],{type:'image/png'}));}return n;};
+let currentLandmark=null,restored=false;const shots=[];
+const presentation={night:false};const view={getPresentation:()=>presentation,setLandmark:id=>currentLandmark=id,landmarkInfo:()=>({id:currentLandmark,source:'glb'}),restorePresentation:p=>{assert.equal(p,presentation);restored=true;},setCinema(){},resetCamera(){},setNight(){},rebuild(){},capture:(state,old,angle,options)=>{shots.push({state:structuredClone(state),options});return document.createElement('canvas');}};
+const source=fs.readFileSync('dist/app.js','utf8').replace(/^import .*;\n/gm,'');
+const fn=new Function('document','window','navigator','matchMedia','createCityView','requestAnimationFrame','setTimeout',...Object.keys(deps),source+';return {getState};');
+const app=fn(document,window,{},()=>({matches:true}),()=>view,fn=>fn(),fn=>fn(),...Object.values(deps));
+const before=app.getState();await document.getElementById('submission-images').onclick();
+assert.equal(shots.length,4);for(const s of shots)assert.deepEqual([s.options.width,s.options.height],[1920,1080]);
+assert.ok(shots[0].state.plots.every(p=>p===null));assert.equal(game.score(shots[1].state),83);assert.equal(shots[3].options.zoom,13);
+assert.equal(document.querySelectorAll('#media-downloads a').length,6);assert.equal(document.getElementById('media-warning').textContent,'');assert.ok(restored);assert.equal(currentLandmark,null);assert.deepEqual(app.getState(),before);assert.equal(document.getElementById('close').disabled,false);
+const a=await zip.mediaZip([{name:'00-cover.png',blob:new Blob(['cover'])},{name:'01-city.png',blob:new Blob(['city'])}]);fs.writeFileSync(join(tmpdir(),'future-city-media-zip-test.zip'),Buffer.from(await a.arrayBuffer()));
+console.log('PASS: cover + four separate HD capture requests, complete example score83, ZIP/individual download controls and game/camera restoration. Pixel content not exercised.');
